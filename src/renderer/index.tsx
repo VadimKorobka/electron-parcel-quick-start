@@ -1,17 +1,34 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
-import resolver from "../services/resolver";
+import * as history from "history";
+import { Provider } from "react-redux";
+import { Switch, Route, Redirect, Router } from "react-router";
+import { BrowserRouter } from "react-router-dom";
+import { createStore } from "redux";
+
+import "./style.less";
+
+import rootReducer from "../store/rootReducer";
+import Users from "./pages/Users";
+import Books from "./pages/Books";
+import Orders from "./pages/Orders";
+
+const store = createStore(rootReducer);
+
+const historyInstance = history.createBrowserHistory();
 
 const App = () => {
-  const sendIpcEvent = React.useCallback(() => {
-    resolver.ipcRenderer.send("click");
-  }, []);
-
   return (
-    <div>
-      <h1>Electron + React + TypeScript + Parcel</h1>
-      <button onClick={sendIpcEvent}>Click me and look at the terminal</button>
-    </div>
+    <Provider store={store}>
+      <Router history={historyInstance}>
+        <Switch>
+          <Route path="/users" component={Users} />
+          <Route path="/books" component={Books} />
+          <Route path="/orders" component={Orders} />
+          <Redirect to="/users" />
+        </Switch>
+      </Router>
+    </Provider>
   );
 };
 

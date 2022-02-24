@@ -5,9 +5,11 @@ import { join } from "path";
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1440,
+    height: 850,
+    resizable: false,
     webPreferences: {
+      nodeIntegration: true,
       preload: join(app.getAppPath(), "dist", "preload.js"),
     },
   });
@@ -15,17 +17,12 @@ function createWindow() {
   // and load the index.html of the app.
   if (isDev) {
     mainWindow.loadURL("http://localhost:1234");
+    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(
       join(app.getAppPath(), "dist", "renderer", "index.html")
     );
   }
-
-  ipcMain.on("click", () => {
-    console.log("Click");
-  });
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished

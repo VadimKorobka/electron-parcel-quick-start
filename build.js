@@ -1,6 +1,7 @@
 const Bundler = require("parcel-bundler");
 const path = require("path");
 
+// const isBuild = true;
 const isBuild = process.env.NODE_ENV === "production";
 
 const runBundleRenderer = async () => {
@@ -9,10 +10,17 @@ const runBundleRenderer = async () => {
   const options = {
     outDir: "./dist/renderer/",
     outFile: "index.html",
-    contentHash: false,
+    contentHash: true,
     publicUrl: isBuild ? "./" : "/dist/renderer/",
     target: "browser",
-    detailedReport: false,
+    detailedReport: true,
+    hmr: true,
+    serveOptions: {
+      port: 1234,
+    },
+    hmrOptions: {
+      port: 1234,
+    },
   };
   const bundler = new Bundler([file], options);
   if (isBuild) {
